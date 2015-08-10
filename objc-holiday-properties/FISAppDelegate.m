@@ -10,40 +10,69 @@
 }
 
 - (NSArray *)holidaysInSeason:(NSString *)season {
-    
-    return nil;
+   // to return an array of all of the "holiday" keys in the sub-dictionary associated with the submitted "season" argument.
+    NSMutableArray *holidays = [[NSMutableArray alloc] init];
+    for (NSString *key in self.database){
+        if ([key isEqualToString:season]){
+            NSArray *holidaysInSeason = [self.database[key] allKeys];
+            holidays = [holidaysInSeason mutableCopy];
+        }
+    }
+    NSArray *correctHolidays = [holidays copy];
+    return correctHolidays;
+
 }
 
 - (NSArray *)suppliesInHoliday:(NSString *)holiday
                       inSeason:(NSString *)season {
     
-    return nil;
+    NSMutableArray *suppliesInSeason = self.database[season][holiday];
+    
+    return suppliesInSeason;
+
 }
 
 - (BOOL)holiday:(NSString* )holiday
      isInSeason:(NSString *)season {
     
-    return nil;
+    if ([self.database[season] objectForKey:holiday] != nil){
+        return YES;
+    }
+    return NO;
 }
 
 - (BOOL)supply:(NSString *)supply
    isInHoliday:(NSString *)holiday
       inSeason:(NSString *)season {
     
-    return nil;
+    if ([self.database[season] objectForKey:holiday] != nil){
+        if ([self.database[season][holiday] containsObject:supply]){
+            return YES;
+        }
+        
+    }
+    
+    return NO;
 }
 
 - (void)addHoliday:(NSString *)holiday
           toSeason:(NSString *)season {
     
-    // no return
+    if ([self.database objectForKey:season] != nil){
+        self.database[season][holiday] = [ [NSMutableArray alloc] init];
+    }
+    
 }
 
 - (void)addSupply:(NSString *)supply
         toHoliday:(NSString *)holiday
          inSeason:(NSString *)season {
     
-    // no return
+    if ([self.database objectForKey:season] != nil){
+        if ([self.database[season] objectForKey:holiday] != nil){
+            [self.database[season][holiday] addObject:supply];
+        }
+    }
 }
 
 @end
